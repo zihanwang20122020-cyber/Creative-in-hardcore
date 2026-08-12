@@ -1,5 +1,4 @@
 VISIT MY MODRINTH PROJECT FOR THE NEXT UPDATES
-
 https://modrinth.com/mod/creative-in-hardcore
 
 
