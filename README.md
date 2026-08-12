@@ -1,3 +1,12 @@
+VISIT MY MODRINTH PROJECT FOR THE NEXT UPDATES
+
+https://modrinth.com/mod/creative-in-hardcore
+
+
+
+
+
+
 # Creative-in-hardcore
 Hardcore Creative is a Fabric server-side mod that gives the recorded world owner controlled creative access without making every operator, LAN guest, command block, console source, or server player a mod
   administrator.
