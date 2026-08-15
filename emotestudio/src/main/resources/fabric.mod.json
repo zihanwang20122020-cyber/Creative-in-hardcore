@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "emotestudio",
+  "version": "${version}",
+  "name": "Emote Studio",
+  "description": "Custom player emotes with a full in-game animation editor, 200+ built-in emotes, and singleplayer/LAN synchronisation.",
+  "authors": [
+    "Zihan"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.zihan.emotestudio.EmoteStudioMod"
+    ],
+    "client": [
+      "dev.zihan.emotestudio.client.EmoteStudioClient"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "emotestudio.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "26.2",
+    "fabric-api": ">=0.157.0+26.2",
+    "java": ">=25"
+  }
+}

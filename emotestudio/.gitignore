@@ -1,0 +1,12 @@
+# Gradle / build output
+.gradle/
+build/
+run/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# The wrapper jar has to be committed, the repository root ignores *.jar
+!gradle/wrapper/gradle-wrapper.jar

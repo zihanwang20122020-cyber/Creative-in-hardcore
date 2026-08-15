@@ -1,0 +1,72 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    // Loom already registers the repositories needed for Minecraft and Fabric itself.
+}
+
+// End-to-end checks that boot a real client, load a world and inspect the rendered player model.
+sourceSets {
+    clientTest {
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+loom {
+    runs {
+        clientGameTest {
+            client()
+            name = 'Client Game Test'
+            source sourceSets.clientTest
+            property 'fabric.client.gametest'
+            property 'fabric.client.gametest.modid', 'emotestudio-clienttest'
+        }
+    }
+}
+
+dependencies {
+    // Minecraft 26.2 ships unobfuscated, so there is no `mappings` layer and no remapping step.
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    def modVersion = project.version
+    inputs.property 'version', modVersion
+
+    filesMatching('fabric.mod.json') {
+        expand 'version': modVersion
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = 'UTF-8'
+    it.options.release = 25
+}
+
+java {
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+    def projectName = project.name
+    inputs.property 'projectName', projectName
+
+    from('LICENSE') {
+        rename { "${it}_$projectName" }
+    }
+}
