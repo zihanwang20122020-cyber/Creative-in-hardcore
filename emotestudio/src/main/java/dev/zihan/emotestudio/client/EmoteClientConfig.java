@@ -29,6 +29,11 @@ public final class EmoteClientConfig {
     private boolean stopOnMove;
     /** Show the emote name above other players while they emote. */
     private boolean showEmoteLabels = true;
+    /**
+     * On a server without the mod, announce emotes through chat so other players running the mod
+     * can still see them. Sends a real chat message under your name, so it can be turned off.
+     */
+    private boolean chatSync = true;
 
     private EmoteClientConfig() {
     }
@@ -65,6 +70,7 @@ public final class EmoteClientConfig {
         config.autoThirdPerson = Boolean.parseBoolean(properties.getProperty("autoThirdPerson", "true"));
         config.stopOnMove = Boolean.parseBoolean(properties.getProperty("stopOnMove", "false"));
         config.showEmoteLabels = Boolean.parseBoolean(properties.getProperty("showEmoteLabels", "true"));
+        config.chatSync = Boolean.parseBoolean(properties.getProperty("chatSync", "true"));
         return config;
     }
 
@@ -77,6 +83,7 @@ public final class EmoteClientConfig {
         properties.setProperty("autoThirdPerson", Boolean.toString(autoThirdPerson));
         properties.setProperty("stopOnMove", Boolean.toString(stopOnMove));
         properties.setProperty("showEmoteLabels", Boolean.toString(showEmoteLabels));
+        properties.setProperty("chatSync", Boolean.toString(chatSync));
 
         try {
             Files.createDirectories(file().getParent());
@@ -134,6 +141,15 @@ public final class EmoteClientConfig {
 
     public boolean showEmoteLabels() {
         return showEmoteLabels;
+    }
+
+    public boolean chatSync() {
+        return chatSync;
+    }
+
+    public void setChatSync(boolean chatSync) {
+        this.chatSync = chatSync;
+        save();
     }
 
     public void setShowEmoteLabels(boolean showEmoteLabels) {

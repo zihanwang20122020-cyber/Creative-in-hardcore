@@ -1,7 +1,8 @@
 # Emote Studio
 
 Custom player emotes for **Minecraft 26.2** (Fabric), with **220 built-in emotes** and a complete
-in-game animation editor. Works in singleplayer, on a LAN world, and on a Fabric server.
+in-game animation editor. Works in singleplayer, on a LAN world, on a Fabric server — and on a
+vanilla server that does not have the mod at all.
 
 ![Pointing up](docs/screenshot-point-up.png)
 ![Floating](docs/screenshot-float.png)
@@ -16,8 +17,47 @@ in-game animation editor. Works in singleplayer, on a LAN world, and on a Fabric
   preview on your own character.
 - **Your emotes are plain files** — everything you make is saved to `.minecraft/emotes/` as readable
   JSON you can edit, back up, or send to a friend.
-- **Emotes are visible to other players** in singleplayer, LAN and on a modded server. Custom emotes
-  travel with their definition, so the other side does not need your file first.
+- **Emotes are visible to other players** — in singleplayer and LAN, on a modded server, *and on a
+  plain vanilla server that has never heard of this mod*.
+
+## Servers without the mod
+
+A vanilla server throws custom packets away — `handleCustomPayload` on the server is literally an
+empty method — so no mod can push arbitrary data from one client to another through it. Chat is the
+one channel a vanilla server does relay between players, so that is what the mod falls back to.
+
+When it detects that the server does not speak its protocol, playing an emote posts one short line:
+
+```
+<Zihan> [emote] moonwalk
+```
+
+- Players **with the mod** see the animation, and the line is hidden from their chat.
+- Players **without the mod** see that line of text and nothing else.
+- You are told once, the first time it happens, and `/emote chatsync off` turns it off for good.
+
+Verified against a real unmodded 26.2 server: the client detects the missing protocol, keeps
+animating locally, and the announcement arrives in the server log.
+
+### The honest limit
+
+A player who does not have the mod installed **cannot see the animation**. That is not a design
+choice, it is how the game works: the animation is computed and drawn by each player's own client,
+and a vanilla client has no code to draw it. No mod can get around this — the chat line is what
+those players get instead.
+
+So, concretely:
+
+| Situation | Result |
+| --- | --- |
+| Singleplayer | You see your emotes |
+| LAN or server **with** the mod | Everyone with the mod sees everything, including custom emotes |
+| Server **without** the mod | Everyone with the mod still sees each other's emotes, over chat |
+| A player **without** the mod | Sees `[emote] moonwalk` in chat, never the animation |
+
+Two more limits worth knowing about the chat fallback: it can only name an emote, not carry one, so
+a custom emote is only visible to players who also have that file; and it is rate limited to one
+message every 1.5 s so the server's spam filter never sees a reason to act.
 
 ## Why it will not get you banned in singleplayer or on LAN
 
@@ -33,8 +73,8 @@ shadow — and the real position the server knows about — stays on the ground.
 looks at ever changes.
 
 The only packets the mod sends are its own cosmetic ones (`emotestudio:play_emote`,
-`emotestudio:stop_emote`), and only when the server has the mod. On a vanilla server nothing is sent
-at all and the emote simply plays for you alone.
+`emotestudio:stop_emote`) when the server has the mod, and an ordinary chat message when it does
+not. Neither is a movement packet, and neither claims anything about where your player is.
 
 > On a public server the rules are set by its owners, not by the client. If a server forbids client
 > mods, this one is no exception, regardless of how it works.
@@ -69,6 +109,7 @@ Commands (client-side, so they work on any server):
 /emote reload          re-read the emotes folder
 /emote editor [id]     open the editor, optionally on an existing emote
 /emote folder          print the path to your emotes folder
+/emote chatsync on|off toggle the chat fallback used on servers without the mod
 ```
 
 In the emote list, press `1`–`8` to bind the highlighted emote to a quick slot, and `★` to favourite
@@ -172,6 +213,16 @@ pose straight off the rendered player model:
 
 It checks that all 220 emotes load, that `point_up` really holds the arm at -168°, that `float`
 lifts the avatar, and that stopping hands the model back to vanilla.
+
+A second test covers the unmodded-server path. Start any plain vanilla server, then:
+
+```bash
+./gradlew runClientGameTest -PemoteTestServer=127.0.0.1:25565
+```
+
+It joins that server, asserts the mod correctly detects that the protocol is unavailable, that the
+emote still animates, and that the chat announcement goes out — which the server's own log confirms.
+Without the property, the test skips itself.
 
 ## Compatibility
 

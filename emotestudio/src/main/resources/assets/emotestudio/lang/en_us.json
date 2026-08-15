@@ -51,7 +51,10 @@
   "command.emotestudio.unknown": "No emote called '%s'",
   "command.emotestudio.count": "%s emotes loaded",
   "command.emotestudio.reloaded": "Reloaded %s emotes",
+  "command.emotestudio.chatsync.on": "Chat sync is ON: on servers without the mod, your emotes are announced in chat so other players with the mod can see them. Turn it off with /emote chatsync off",
+  "command.emotestudio.chatsync.off": "Chat sync is OFF: on servers without the mod, your emotes are only visible to you.",
   "command.emotestudio.folder": "Emotes folder: %s",
 
+  "message.emotestudio.chat_sync_notice": "This server does not have Emote Studio, so your emotes are announced in chat for other players who do. Use /emote chatsync off to stop.",
   "message.emotestudio.too_big": "%s is too large to share, playing it locally only"
 }

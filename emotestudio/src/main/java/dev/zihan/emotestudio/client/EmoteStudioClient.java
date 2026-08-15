@@ -43,6 +43,7 @@ public final class EmoteStudioClient implements ClientModInitializer {
 
         registerKeys();
         registerReceivers();
+        EmoteChatBridge.register();
         registerTicking();
         EmoteClientCommands.register();
 
@@ -115,6 +116,7 @@ public final class EmoteStudioClient implements ClientModInitializer {
     private void registerTicking() {
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
             EmoteAnimator.get().tick(minecraft);
+            EmoteChatBridge.tick((long) EmoteAnimator.get().now());
 
             if (minecraft.player == null) {
                 return;
@@ -170,7 +172,9 @@ public final class EmoteStudioClient implements ClientModInitializer {
         EmoteAnimator.get().start(minecraft.player.getUUID(), emote, 1.0F);
 
         if (!ClientPlayNetworking.canSend(EmotePayloads.PlayEmote.TYPE)) {
-            // Vanilla or mod-less server: the emote still plays here, just not for anyone else.
+            // The server does not have the mod, so it will never relay a custom payload. Fall back
+            // to chat, which every server relays, so other players running the mod still see this.
+            EmoteChatBridge.sendEmote(emote);
             return true;
         }
 
@@ -197,6 +201,8 @@ public final class EmoteStudioClient implements ClientModInitializer {
         EmoteAnimator.get().stop(minecraft.player.getUUID());
         if (ClientPlayNetworking.canSend(EmotePayloads.StopEmote.TYPE)) {
             ClientPlayNetworking.send(new EmotePayloads.StopEmote());
+        } else {
+            EmoteChatBridge.sendStop();
         }
     }
 }

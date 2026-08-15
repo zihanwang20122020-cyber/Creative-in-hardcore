@@ -6,7 +6,8 @@
   "environment": "client",
   "entrypoints": {
     "fabric-client-gametest": [
-      "dev.zihan.emotestudio.clienttest.EmoteRenderingGameTest"
+      "dev.zihan.emotestudio.clienttest.EmoteRenderingGameTest",
+      "dev.zihan.emotestudio.clienttest.VanillaServerGameTest"
     ]
   },
   "depends": {

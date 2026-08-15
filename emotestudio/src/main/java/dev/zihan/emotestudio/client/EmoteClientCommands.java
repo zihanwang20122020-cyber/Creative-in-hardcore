@@ -102,6 +102,29 @@ public final class EmoteClientCommands {
                                                 .setScreenAndShow(EmoteEditorScreen.forExisting(emote)));
                                         return 1;
                                     })))
+                    .then(ClientCommands.literal("chatsync")
+                            .executes(context -> {
+                                context.getSource().sendFeedback(Component
+                                        .translatable(EmoteStudioClient.config().chatSync()
+                                                ? "command.emotestudio.chatsync.on"
+                                                : "command.emotestudio.chatsync.off")
+                                        .withStyle(ChatFormatting.AQUA));
+                                return 1;
+                            })
+                            .then(ClientCommands.literal("on").executes(context -> {
+                                EmoteStudioClient.config().setChatSync(true);
+                                context.getSource().sendFeedback(Component
+                                        .translatable("command.emotestudio.chatsync.on")
+                                        .withStyle(ChatFormatting.GREEN));
+                                return 1;
+                            }))
+                            .then(ClientCommands.literal("off").executes(context -> {
+                                EmoteStudioClient.config().setChatSync(false);
+                                context.getSource().sendFeedback(Component
+                                        .translatable("command.emotestudio.chatsync.off")
+                                        .withStyle(ChatFormatting.YELLOW));
+                                return 1;
+                            })))
                     .then(ClientCommands.literal("folder").executes(context -> {
                         context.getSource().sendFeedback(Component
                                 .translatable("command.emotestudio.folder",

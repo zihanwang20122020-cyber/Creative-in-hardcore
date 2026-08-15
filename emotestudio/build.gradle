@@ -30,6 +30,12 @@ loom {
             source sourceSets.clientTest
             property 'fabric.client.gametest'
             property 'fabric.client.gametest.modid', 'emotestudio-clienttest'
+
+            // Point this at a running unmodded server to also exercise the chat fallback:
+            //   ./gradlew runClientGameTest -PemoteTestServer=127.0.0.1:25599
+            if (project.hasProperty('emoteTestServer')) {
+                property 'emotestudio.test.server', project.property('emoteTestServer')
+            }
         }
     }
 }

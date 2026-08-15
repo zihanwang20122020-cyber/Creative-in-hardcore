@@ -51,7 +51,10 @@
   "command.emotestudio.unknown": "Aucune emote nommée « %s »",
   "command.emotestudio.count": "%s emotes chargées",
   "command.emotestudio.reloaded": "%s emotes rechargées",
+  "command.emotestudio.chatsync.on": "Synchro par chat ACTIVÉE : sur un serveur sans le mod, tes emotes sont annoncées dans le chat pour que les autres joueurs équipés du mod les voient. Désactive avec /emote chatsync off",
+  "command.emotestudio.chatsync.off": "Synchro par chat DÉSACTIVÉE : sur un serveur sans le mod, tes emotes ne seront visibles que par toi.",
   "command.emotestudio.folder": "Dossier des emotes : %s",
 
+  "message.emotestudio.chat_sync_notice": "Ce serveur n'a pas Emote Studio : tes emotes sont annoncées dans le chat pour les joueurs qui l'ont. Tape /emote chatsync off pour arrêter.",
   "message.emotestudio.too_big": "%s est trop volumineuse pour être partagée, elle est jouée en local seulement"
 }
