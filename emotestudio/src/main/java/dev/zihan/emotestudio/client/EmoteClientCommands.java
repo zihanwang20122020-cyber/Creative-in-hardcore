@@ -125,6 +125,29 @@ public final class EmoteClientCommands {
                                         .withStyle(ChatFormatting.YELLOW));
                                 return 1;
                             })))
+                    .then(ClientCommands.literal("physical")
+                            .executes(context -> {
+                                context.getSource().sendFeedback(Component
+                                        .translatable(EmoteStudioClient.config().physicalPerformance()
+                                                ? "command.emotestudio.physical.on"
+                                                : "command.emotestudio.physical.off")
+                                        .withStyle(ChatFormatting.AQUA));
+                                return 1;
+                            })
+                            .then(ClientCommands.literal("on").executes(context -> {
+                                EmoteStudioClient.config().setPhysicalPerformance(true);
+                                context.getSource().sendFeedback(Component
+                                        .translatable("command.emotestudio.physical.on")
+                                        .withStyle(ChatFormatting.GREEN));
+                                return 1;
+                            }))
+                            .then(ClientCommands.literal("off").executes(context -> {
+                                EmoteStudioClient.config().setPhysicalPerformance(false);
+                                context.getSource().sendFeedback(Component
+                                        .translatable("command.emotestudio.physical.off")
+                                        .withStyle(ChatFormatting.YELLOW));
+                                return 1;
+                            })))
                     .then(ClientCommands.literal("folder").executes(context -> {
                         context.getSource().sendFeedback(Component
                                 .translatable("command.emotestudio.folder",

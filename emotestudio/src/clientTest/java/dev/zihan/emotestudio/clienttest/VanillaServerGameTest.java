@@ -47,6 +47,7 @@ public final class VanillaServerGameTest implements FabricClientGameTest {
             assertProtocolUnavailable(context);
             assertEmoteStillPlaysLocally(context);
             assertChatFallbackWasSent(context);
+            assertVanillaVisiblePerformance(context);
 
             context.takeScreenshot("emotestudio_vanilla_server");
         } finally {
@@ -114,6 +115,39 @@ public final class VanillaServerGameTest implements FabricClientGameTest {
         context.waitTicks(40);
         context.runOnClient(minecraft -> EmoteStudioClient.stopOwnEmote());
         context.waitTicks(20);
+    }
+
+    /**
+     * The part players without the mod actually see: the emote has to move the real player — body
+     * rotation, head rotation, swings — because that is all a vanilla client can draw.
+     */
+    private void assertVanillaVisiblePerformance(ClientGameTestContext context) {
+        context.runOnClient(minecraft -> {
+            if (!EmoteStudioClient.playOwnEmote("dance_spin")) {
+                throw new AssertionError("could not start 'dance_spin'");
+            }
+        });
+        context.waitTicks(10);
+
+        double startY = context.computeOnClient(minecraft -> (double) minecraft.player.getY());
+        float firstYaw = context.computeOnClient(minecraft -> minecraft.player.getYRot());
+        context.waitTicks(12);
+        float laterYaw = context.computeOnClient(minecraft -> minecraft.player.getYRot());
+        double endY = context.computeOnClient(minecraft -> (double) minecraft.player.getY());
+
+        float turned = Math.abs(laterYaw - firstYaw);
+        if (turned < 15.0F) {
+            throw new AssertionError("a spin emote should turn the real player body for vanilla "
+                    + "viewers, but yaw only moved " + turned + " degrees");
+        }
+        // The performance must stay inside ordinary movement: no flying, no teleporting upwards.
+        if (Math.abs(endY - startY) > 2.0) {
+            throw new AssertionError("the performance moved the player vertically by "
+                    + (endY - startY) + " blocks, which is not ordinary movement");
+        }
+
+        context.runOnClient(minecraft -> EmoteStudioClient.stopOwnEmote());
+        context.waitTicks(10);
     }
 
     private static ModelPart rightArm(Minecraft minecraft) {

@@ -12,7 +12,6 @@
   "key.emotestudio.slot6": "Quick emote 6",
   "key.emotestudio.slot7": "Quick emote 7",
   "key.emotestudio.slot8": "Quick emote 8",
-
   "gui.emotestudio.browser": "Emotes",
   "gui.emotestudio.wheel": "Pick an emote",
   "gui.emotestudio.wheel.hint": "Aim and click · 1-8 to pick · Tab for the next page · scroll to change page",
@@ -47,14 +46,15 @@
   "gui.emotestudio.save_failed": "Could not save: %s",
   "gui.emotestudio.overrides_builtin": "Saving writes a copy that overrides the built-in emote.",
   "gui.emotestudio.shortcuts": "Space play/pause · K add key · Del remove · ←/→ step · Tab next part · Ctrl+S save",
-
   "command.emotestudio.unknown": "No emote called '%s'",
   "command.emotestudio.count": "%s emotes loaded",
   "command.emotestudio.reloaded": "Reloaded %s emotes",
   "command.emotestudio.chatsync.on": "Chat sync is ON: on servers without the mod, your emotes are announced in chat so other players with the mod can see them. Turn it off with /emote chatsync off",
   "command.emotestudio.chatsync.off": "Chat sync is OFF: on servers without the mod, your emotes are only visible to you.",
   "command.emotestudio.folder": "Emotes folder: %s",
-
   "message.emotestudio.chat_sync_notice": "This server does not have Emote Studio, so your emotes are announced in chat for other players who do. Use /emote chatsync off to stop.",
-  "message.emotestudio.too_big": "%s is too large to share, playing it locally only"
+  "message.emotestudio.too_big": "%s is too large to share, playing it locally only",
+  "command.emotestudio.physical.on": "Physical performance is ON: on servers without the mod, your emotes also turn your body, swing your arms and crouch, so players without the mod see something. Turn it off with /emote physical off",
+  "command.emotestudio.physical.off": "Physical performance is OFF: players without the mod will not see your emotes at all.",
+  "message.emotestudio.physical_notice": "Nobody here can render emotes, so your character also performs them for real (turning, swinging, crouching). Use /emote physical off to stop."
 }

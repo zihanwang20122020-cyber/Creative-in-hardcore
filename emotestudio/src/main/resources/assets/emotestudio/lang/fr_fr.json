@@ -12,7 +12,6 @@
   "key.emotestudio.slot6": "Emote rapide 6",
   "key.emotestudio.slot7": "Emote rapide 7",
   "key.emotestudio.slot8": "Emote rapide 8",
-
   "gui.emotestudio.browser": "Emotes",
   "gui.emotestudio.wheel": "Choisis une emote",
   "gui.emotestudio.wheel.hint": "Vise et clique · 1-8 pour choisir · Tab pour la page suivante · molette pour changer de page",
@@ -47,14 +46,15 @@
   "gui.emotestudio.save_failed": "Enregistrement impossible : %s",
   "gui.emotestudio.overrides_builtin": "Enregistrer crée une copie qui remplace l'emote intégrée.",
   "gui.emotestudio.shortcuts": "Espace lecture · K ajouter clé · Suppr retirer · ←/→ image par image · Tab partie suivante · Ctrl+S enregistrer",
-
   "command.emotestudio.unknown": "Aucune emote nommée « %s »",
   "command.emotestudio.count": "%s emotes chargées",
   "command.emotestudio.reloaded": "%s emotes rechargées",
   "command.emotestudio.chatsync.on": "Synchro par chat ACTIVÉE : sur un serveur sans le mod, tes emotes sont annoncées dans le chat pour que les autres joueurs équipés du mod les voient. Désactive avec /emote chatsync off",
   "command.emotestudio.chatsync.off": "Synchro par chat DÉSACTIVÉE : sur un serveur sans le mod, tes emotes ne seront visibles que par toi.",
   "command.emotestudio.folder": "Dossier des emotes : %s",
-
   "message.emotestudio.chat_sync_notice": "Ce serveur n'a pas Emote Studio : tes emotes sont annoncées dans le chat pour les joueurs qui l'ont. Tape /emote chatsync off pour arrêter.",
-  "message.emotestudio.too_big": "%s est trop volumineuse pour être partagée, elle est jouée en local seulement"
+  "message.emotestudio.too_big": "%s est trop volumineuse pour être partagée, elle est jouée en local seulement",
+  "command.emotestudio.physical.on": "Performance physique ACTIVÉE : sur un serveur sans le mod, tes emotes tournent aussi ton corps, agitent tes bras et t'accroupissent, pour que les joueurs sans le mod voient quelque chose. Désactive avec /emote physical off",
+  "command.emotestudio.physical.off": "Performance physique DÉSACTIVÉE : les joueurs sans le mod ne verront pas du tout tes emotes.",
+  "message.emotestudio.physical_notice": "Personne ici ne peut afficher les emotes, donc ton personnage les joue aussi pour de vrai (rotation, coups de bras, accroupissement). Tape /emote physical off pour arrêter."
 }

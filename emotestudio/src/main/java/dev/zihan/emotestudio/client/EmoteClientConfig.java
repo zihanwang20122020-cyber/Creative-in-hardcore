@@ -34,6 +34,12 @@ public final class EmoteClientConfig {
      * can still see them. Sends a real chat message under your name, so it can be turned off.
      */
     private boolean chatSync = true;
+    /**
+     * On a server without the mod, also perform the emote physically — body and head rotation, arm
+     * swings, crouching and hops — so players without the mod see something too. This one really
+     * moves the player, within what ordinary input allows.
+     */
+    private boolean physicalPerformance = true;
 
     private EmoteClientConfig() {
     }
@@ -71,6 +77,8 @@ public final class EmoteClientConfig {
         config.stopOnMove = Boolean.parseBoolean(properties.getProperty("stopOnMove", "false"));
         config.showEmoteLabels = Boolean.parseBoolean(properties.getProperty("showEmoteLabels", "true"));
         config.chatSync = Boolean.parseBoolean(properties.getProperty("chatSync", "true"));
+        config.physicalPerformance = Boolean.parseBoolean(
+                properties.getProperty("physicalPerformance", "true"));
         return config;
     }
 
@@ -84,6 +92,7 @@ public final class EmoteClientConfig {
         properties.setProperty("stopOnMove", Boolean.toString(stopOnMove));
         properties.setProperty("showEmoteLabels", Boolean.toString(showEmoteLabels));
         properties.setProperty("chatSync", Boolean.toString(chatSync));
+        properties.setProperty("physicalPerformance", Boolean.toString(physicalPerformance));
 
         try {
             Files.createDirectories(file().getParent());
@@ -149,6 +158,15 @@ public final class EmoteClientConfig {
 
     public void setChatSync(boolean chatSync) {
         this.chatSync = chatSync;
+        save();
+    }
+
+    public boolean physicalPerformance() {
+        return physicalPerformance;
+    }
+
+    public void setPhysicalPerformance(boolean physicalPerformance) {
+        this.physicalPerformance = physicalPerformance;
         save();
     }
 

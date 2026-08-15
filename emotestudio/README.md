@@ -32,38 +32,51 @@ When it detects that the server does not speak its protocol, playing an emote po
 <Zihan> [emote] moonwalk
 ```
 
-- Players **with the mod** see the animation, and the line is hidden from their chat.
-- Players **without the mod** see that line of text and nothing else.
+- Players **with the mod** see the full animation, and the line is hidden from their chat.
 - You are told once, the first time it happens, and `/emote chatsync off` turns it off for good.
 
-Verified against a real unmodded 26.2 server: the client detects the missing protocol, keeps
-animating locally, and the announcement arrives in the server log.
+The chat line only helps players who have the mod, so there is a second fallback for everyone else.
 
-### The honest limit
+## Players without the mod
 
-A player who does not have the mod installed **cannot see the animation**. That is not a design
-choice, it is how the game works: the animation is computed and drawn by each player's own client,
-and a vanilla client has no code to draw it. No mod can get around this — the chat line is what
-those players get instead.
+A vanilla client cannot be told to bend another player's arm: the protocol carries no limb angles,
+and `PlayerModel` recomputes them locally from movement. So no packet will ever make an unmodded
+client draw a pose.
 
-So, concretely:
+But a vanilla server already relays four things about you that every vanilla client knows how to
+draw: **body rotation, head rotation, arm swings, and crouching or hopping**. When nothing else can
+reach those players, the mod drives all four from the emote's own curves. Your character really
+turns, looks, swings and bobs in the emote's rhythm, and everyone sees it — no mod anywhere.
+
+A spin emote spins you. A wave swings your arm on the beat. A bow dips your head. A sit crouches
+you. It is a silhouette of the emote rather than the emote itself, but every one of the 220 produces
+something visible to everyone.
+
+**This part is real movement.** Everything else in the mod only changes how you are drawn; this
+actually rotates your player and presses jump and sneak. It stays strictly inside what you could do
+by hand — no teleporting, no flying, no speed — and a real unmodded 26.2 server accepted it without
+a single movement warning. It only runs when the server lacks the mod, which is exactly when it is
+the only way anyone could see anything, and `/emote physical off` disables it.
+
+### What each kind of player sees
 
 | Situation | Result |
 | --- | --- |
 | Singleplayer | You see your emotes |
-| LAN or server **with** the mod | Everyone with the mod sees everything, including custom emotes |
-| Server **without** the mod | Everyone with the mod still sees each other's emotes, over chat |
-| A player **without** the mod | Sees `[emote] moonwalk` in chat, never the animation |
+| LAN or server **with** the mod | Everyone with the mod sees the full animation, custom emotes included |
+| Server **without** the mod, viewer **with** the mod | Full animation, carried over chat |
+| Server **without** the mod, viewer **without** the mod | Your body turns, swings, crouches and hops in the emote's rhythm |
 
-Two more limits worth knowing about the chat fallback: it can only name an emote, not carry one, so
-a custom emote is only visible to players who also have that file; and it is rate limited to one
-message every 1.5 s so the server's spam filter never sees a reason to act.
+The remaining limit is the limb poses themselves: an unmodded client will never draw the exact arm
+and leg angles, because it has no code that can. Two smaller ones on the chat fallback: it names an
+emote rather than carrying it, so a custom emote only animates for players who also have that file,
+and it is rate limited to one message every 1.5 s so the spam filter never has a reason to act.
 
-## Why it will not get you banned in singleplayer or on LAN
+## Why it will not get you banned
 
-Emotes here are **purely visual**. The mod never moves your player, never changes your position,
-velocity, rotation or pose, and never sends movement packets. It only changes how your character is
-*drawn*:
+The animation itself is **purely visual**. The mod never moves your player, never changes your
+position, velocity, rotation or pose, and never sends movement packets. It only changes how your
+character is *drawn*:
 
 - limb animation is applied inside the player model, at render time;
 - whole-body motion (`float`, `heaven`, `moonwalk`) is applied to the render transform only.
@@ -73,8 +86,13 @@ shadow — and the real position the server knows about — stays on the ground.
 looks at ever changes.
 
 The only packets the mod sends are its own cosmetic ones (`emotestudio:play_emote`,
-`emotestudio:stop_emote`) when the server has the mod, and an ordinary chat message when it does
-not. Neither is a movement packet, and neither claims anything about where your player is.
+`emotestudio:stop_emote`) when the server has the mod, and an ordinary chat message when it does not.
+Neither is a movement packet, and neither claims anything about where your player is.
+
+The one exception is the physical performance described above, which runs only on servers without
+the mod. That one does move you — but only through ordinary rotation, jump and sneak input, the same
+things the server sees from any player pressing keys. Turn it off with `/emote physical off` if you
+would rather nothing about your player changes at all.
 
 > On a public server the rules are set by its owners, not by the client. If a server forbids client
 > mods, this one is no exception, regardless of how it works.
@@ -110,6 +128,7 @@ Commands (client-side, so they work on any server):
 /emote editor [id]     open the editor, optionally on an existing emote
 /emote folder          print the path to your emotes folder
 /emote chatsync on|off toggle the chat fallback used on servers without the mod
+/emote physical on|off toggle the physical performance seen by players without the mod
 ```
 
 In the emote list, press `1`–`8` to bind the highlighted emote to a quick slot, and `★` to favourite
@@ -221,7 +240,8 @@ A second test covers the unmodded-server path. Start any plain vanilla server, t
 ```
 
 It joins that server, asserts the mod correctly detects that the protocol is unavailable, that the
-emote still animates, and that the chat announcement goes out — which the server's own log confirms.
+emote still animates, that the chat announcement goes out — which the server's own log confirms —
+and that a spin emote really turns the player's body while staying inside ordinary movement.
 Without the property, the test skips itself.
 
 ## Compatibility

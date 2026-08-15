@@ -117,6 +117,7 @@ public final class EmoteStudioClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
             EmoteAnimator.get().tick(minecraft);
             EmoteChatBridge.tick((long) EmoteAnimator.get().now());
+            VanillaPerformer.tick(minecraft);
 
             if (minecraft.player == null) {
                 return;
@@ -175,6 +176,9 @@ public final class EmoteStudioClient implements ClientModInitializer {
             // The server does not have the mod, so it will never relay a custom payload. Fall back
             // to chat, which every server relays, so other players running the mod still see this.
             EmoteChatBridge.sendEmote(emote);
+            // Chat only reaches players who have the mod. The physical performance is what the
+            // others actually see, so both run together on an unmodded server.
+            VanillaPerformer.start(emote);
             return true;
         }
 
@@ -203,6 +207,7 @@ public final class EmoteStudioClient implements ClientModInitializer {
             ClientPlayNetworking.send(new EmotePayloads.StopEmote());
         } else {
             EmoteChatBridge.sendStop();
+            VanillaPerformer.stop();
         }
     }
 }
